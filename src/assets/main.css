@@ -1,16 +1,18 @@
 @import './base.css';
+@import url('https://rsms.me/inter/inter.css');
 
 #app {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  background-color: #1E1E1E; /* Slightly lighter dark for app container */
 }
 
 a,
 .green {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: #03DAC6; /* Accent color for links and interactive elements */
   transition: 0.4s;
   padding: 3px;
 }
@@ -25,11 +27,51 @@ a,
   body {
     display: flex;
     place-items: center;
+    background-color: #121212; /* Consistent dark theme for larger screens */
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: block;
+    max-width: 1280px;
     padding: 0 2rem;
+    background-color: #1E1E1E; /* Consistent with app container */
   }
 }
+
+@media (max-width: 768px) {
+  #app {
+    padding: 1rem;
+  }
+  body {
+    font-size: 14px;
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #E0E0E0; /* Light text for contrast */
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Proxima Nova', sans-serif;
+  font-weight: bold;
+}
+
+/* Additional styles for dark theme */
+.card {
+  background-color: #2C2C2C;
+  border: 1px solid #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+
+
+

@@ -105,6 +105,7 @@ onMounted(async () => {
 .genre-title {
   font-size: 1.5rem;
   color: var(--color-heading);
+  margin-bottom: 0.8rem;
 }
 
 .slider-container {

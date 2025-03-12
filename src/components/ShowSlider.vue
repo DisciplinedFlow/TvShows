@@ -3,6 +3,8 @@
     <button
       class="nav-button prev"
       @click="handleScroll(-1)"
+      @mousedown="startScrolling(-1)"
+      @mouseup="stopScrolling"
       v-show="canScrollBack"
     >
       <span>‹</span>
@@ -17,6 +19,8 @@
     <button
       class="nav-button next"
       @click="handleScroll(1)"
+      @mousedown="startScrolling(1)"
+      @mouseup="stopScrolling"
       v-show="canScrollForward"
     >
       <span>›</span>
@@ -25,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted  } from 'vue'
 
 defineOptions({
   name: 'ShowSlider'
@@ -35,41 +39,21 @@ const sliderRef = ref(null)
 const canScrollBack = ref(false)
 const canScrollForward = ref(true)
 
-// const handleScroll = (direction = null) => {
-//   if (!sliderRef.value) return
 
-//   if (direction !== null) {
-//     // Calculate 25% of the total scrollable width
-//     const totalScrollWidth = sliderRef.value.scrollWidth - sliderRef.value.clientWidth
-//     const scrollAmount = totalScrollWidth * 0.25
+let scrollInterval;
 
-//     sliderRef.value.scrollBy({
-//       left: scrollAmount * direction,
-//       behavior: 'smooth'
-//     })
-//   }
-
-//   // Update scroll buttons visibility
-//   canScrollBack.value = sliderRef.value.scrollLeft > 0
-//   canScrollForward.value =
-//     sliderRef.value.scrollLeft + sliderRef.value.clientWidth <
-//     sliderRef.value.scrollWidth
-// }
-
+// Function to handle scrolling by a specified direction
 const handleScroll = (direction = null) => {
   if (!sliderRef.value || direction === null) return;
 
   const container = sliderRef.value;
-  const targetScroll = direction === 1 ?
-    container.scrollWidth - container.clientWidth : // Scroll to end
-    0; // Scroll to start
+  const scrollAmount = container.clientWidth * 3; // Scroll by three tiles
 
-  container.scrollTo({
-    left: targetScroll,
+  container.scrollBy({
+    left: scrollAmount * direction,
     behavior: 'smooth'
   });
 
-  // Update buttons visibility after scroll animation
   setTimeout(() => {
     canScrollBack.value = container.scrollLeft > 0;
     canScrollForward.value =
@@ -77,9 +61,21 @@ const handleScroll = (direction = null) => {
   }, 300);
 };
 
+// Function to start continuous scrolling in a specified direction
+const startScrolling = (direction) => {
+  scrollInterval = setInterval(() => {
+    handleScroll(direction);
+  }, 100); // Adjust interval as needed
+};
 
+// Function to stop continuous scrolling
+const stopScrolling = () => {
+  clearInterval(scrollInterval);
+};
+
+// Lifecycle hook to set initial scroll button visibility
 onMounted(() => {
-  handleScroll()
+  canScrollForward.value = sliderRef.value.clientWidth < sliderRef.value.scrollWidth;
 })
 </script>
 
@@ -98,11 +94,14 @@ onMounted(() => {
   -webkit-overflow-scrolling: touch;
   padding: 1.5rem 0;
   scroll-snap-type: x mandatory;
-  -webkit-scroll-snap-type: x mandatory;
   -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
-/* Hide webkit scrollbar */
+.shows-row > * {
+  scroll-snap-align: start;
+}
+
 .shows-row::-webkit-scrollbar {
   display: none;
 }
@@ -136,9 +135,17 @@ onMounted(() => {
   background: linear-gradient(to right, rgba(0, 0, 0, 0.7), transparent);
 }
 
+.prev:hover {
+  background: linear-gradient(to right, var(--vt-c-purple), transparent);
+}
+
 .next {
   right: 0;
   background: linear-gradient(to left, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.next:hover {
+  background: linear-gradient(to left, var(--vt-c-purple), transparent);
 }
 
 @media (max-width: 768px) {

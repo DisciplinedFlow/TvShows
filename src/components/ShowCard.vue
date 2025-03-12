@@ -39,9 +39,11 @@ const navigateToShow = () => {
   height: 100%;
   transition: all 0.3s ease;
   position: relative;
-  aspect-ratio: 2/3;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 12rem; /* Adjust width for mobile */
+  margin: 0 auto; /* Center in viewport */
 }
 
 .show-card:hover {
@@ -52,11 +54,15 @@ const navigateToShow = () => {
 
 .image-container {
   position: relative;
-  flex: 1;
+  width: 100%;
+  padding-top: 150%; /* 2:3 aspect ratio */
   overflow: hidden;
 }
 
 .show-image {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -85,7 +91,7 @@ const navigateToShow = () => {
   right: 0;
   padding: 0.75rem;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  color: white;
+  color: var(--color-text);
 }
 
 .show-title {
@@ -108,6 +114,10 @@ const navigateToShow = () => {
 }
 
 @media (max-width: 480px) {
+  .show-card {
+    max-width: 10rem; /* Smaller size for mobile */
+  }
+
   .show-info {
     padding: 0.5rem;
   }
