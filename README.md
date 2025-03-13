@@ -82,7 +82,7 @@ For the key components:
 I paid special attention to the views:
 
 - The **DashboardView** has proper region landmarks and live regions that announce when content is loading.
-- In **ShowDetail**, I added a keyboard-accessible back button that makes navigation more intuitive - try hitting Tab to reach it and Enter to go back!
+- In **ShowDetail**, I added a keyboard-accessible back button that makes navigation more intuitive - try hitting Tab to reach it and Enter to go back
 
 ## The Smooth Scrolling Implementation
 
@@ -93,8 +93,20 @@ When building the sliders, I initially used native scrolling but found it wasn't
 
 The scrolling implementation was one of the trickier parts to get right. I had to fine-tune the scrolling amount (3 tiles at a time) and handle edge cases like when you reach the end of the content. Check out `ShowSlider.vue` if you're curious about the implementation details.
 
+## Testing Philosophy
+
+As a developer, I believe tests aren't just a safety net - they're documentation that actually runs. That's why I organized my tests into three main categories:
+
+1. **Component Functionality Tests**: For components like `ShowCard` and `SearchBar`, I wrote focused tests that verify their core responsibilities. I didn't test every little thing - just what actually matters. For instance, with the `SearchBar` component, I'm mostly concerned that it emits events correctly when users type, since that's its primary job.
+
+2. **Accessibility Tests**: I separated these into their own test suite because accessibility deserves special attention. These tests verify that ARIA attributes, keyboard navigation, and screen reader support work correctly. They're basically my insurance policy against accessibility regressions as I iterate on the UI.
+
+3. **Integration Tests**: For the slider components, I focused more on the interaction between elements rather than just isolated functionality. I had to get creative when testing scroll behavior since JSDOM doesn't fully support these browser APIs.
+
+I'm particularly proud of how the accessibility tests document the expected behavior for keyboard users and screen reader compatibility. When you read through these tests, you'll get a clear picture of not just what the component does, but how it should be experienced by all users.
+
 ## Running the App
 
-Once you've started the dev server, head to the displayed localhost URL (usually http://localhost:xxxx) to check out the app. Try searching for your favorite shows!
+Once you've started the dev server, head to the displayed localhost URL (usually http://localhost:xxxx) to check out the app. Try searching for your favorite shows
 
 Let me know if you have any questions or suggestions for improvements.
