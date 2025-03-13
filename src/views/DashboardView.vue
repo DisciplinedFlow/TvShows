@@ -1,22 +1,23 @@
 <template>
-  <div class="dashboard-container">
-    <div class="search-wrapper">
+  <div class="dashboard-container" role="main" aria-label="TV Show Dashboard">
+    <div class="search-wrapper" role="search" aria-label="Search TV Shows">
       <SearchBar />
     </div>
 
-    <LoadingState v-if="loading" />
-    <ErrorState v-else-if="error" :message="error" />
+    <LoadingState v-if="loading" aria-live="polite" />
+    <ErrorState v-else-if="error" :message="error" aria-live="assertive" />
 
     <div v-else class="shows-content">
       <!-- Top 10 Section -->
-      <section class="genre-section">
-        <h2 class="genre-title">Top 10 Shows</h2>
-        <ShowSlider>
+      <section class="genre-section" aria-labelledby="top-10-title">
+        <h2 id="top-10-title" class="genre-title">Top 10 Shows</h2>
+        <ShowSlider aria-label="Top 10 Shows Slider">
           <ShowCard
             v-for="show in topShows"
             :key="show.id"
             :show="show"
             class="show-item"
+            aria-label="Show Card"
           />
         </ShowSlider>
       </section>
@@ -26,14 +27,16 @@
         v-for="(shows, genre) in showsByGenre"
         :key="genre"
         class="genre-section"
+        aria-labelledby="genre-{{ genre }}-title"
       >
-        <h2 class="genre-title">{{ genre }}</h2>
-        <ShowSlider>
+        <h2 :id="`genre-${genre}-title`" class="genre-title">{{ genre }}</h2>
+        <ShowSlider :aria-label="`${genre} Shows Slider`">
           <ShowCard
             v-for="show in shows"
             :key="show.id"
             :show="show"
             class="show-item"
+            aria-label="Show Card"
           />
         </ShowSlider>
       </section>

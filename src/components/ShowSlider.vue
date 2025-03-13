@@ -1,18 +1,21 @@
 <template>
-  <div class="slider-container">
+  <div class="slider-container" role="region" aria-label="TV Show Slider">
     <button
       class="nav-button prev"
       @click="handleScroll(-1)"
       @mousedown="startScrolling(-1)"
       @mouseup="stopScrolling"
       v-show="canScrollBack"
+      tabindex="0"
+      aria-label="Previous Shows"
     >
-      <span>‹</span>
+      <span aria-hidden="true">‹</span>
     </button>
     <div
       class="shows-row"
       ref="sliderRef"
       @scroll="handleScroll"
+      role="list"
     >
       <slot></slot>
     </div>
@@ -22,8 +25,10 @@
       @mousedown="startScrolling(1)"
       @mouseup="stopScrolling"
       v-show="canScrollForward"
+      tabindex="0"
+      aria-label="Next Shows"
     >
-      <span>›</span>
+      <span aria-hidden="true">›</span>
     </button>
   </div>
 </template>
@@ -65,7 +70,7 @@ const handleScroll = (direction = null) => {
 const startScrolling = (direction) => {
   scrollInterval = setInterval(() => {
     handleScroll(direction);
-  }, 100); // Adjust interval as needed
+  }, 100);
 };
 
 // Function to stop continuous scrolling
@@ -94,12 +99,8 @@ onMounted(() => {
   -webkit-overflow-scrolling: touch;
   padding: 1.5rem 0;
   scroll-snap-type: x mandatory;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.shows-row > * {
-  scroll-snap-align: start;
+  -ms-overflow-style: none;
+  overflow-y: hidden;
 }
 
 .shows-row::-webkit-scrollbar {
@@ -110,7 +111,7 @@ onMounted(() => {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 3.75rem; /* 60px */
+  width: 3.75rem;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   border: none;

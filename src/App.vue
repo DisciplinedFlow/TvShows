@@ -53,6 +53,6 @@ nav a {
 }
 
 nav a:hover {
-  color: var(--color-text);
+  color: var(--vt-c-purple);
 }
 </style>

@@ -1,18 +1,35 @@
 <template>
   <div class="search-container">
+    <label for="show-search" class="visually-hidden">Search TV shows</label>
     <input
+      id="show-search"
       v-model="searchQuery"
-      type="text"
+      type="search"
       placeholder="Search TV shows..."
       @input="handleSearch"
       class="search-input"
+      aria-autocomplete="list"
+      aria-controls="search-results"
+      aria-expanded="searchResults.length && searchQuery"
+      role="searchbox"
     />
-    <div v-if="searchResults.length && searchQuery" class="search-results">
+    <div
+      v-if="searchResults.length && searchQuery"
+      class="search-results"
+      id="search-results"
+      role="listbox"
+      aria-label="Search results"
+    >
       <div
-        v-for="show in searchResults"
+        v-for="(show, index) in searchResults"
         :key="show.id"
         class="search-result-item"
         @click="navigateToShow(show.id)"
+        @keydown.enter="navigateToShow(show.id)"
+        tabindex="0"
+        role="option"
+        :aria-selected="index === selectedIndex"
+        :id="`search-result-${show.id}`"
       >
         <img :src="show.image && show.image.medium" :alt="show.name" class="result-image" />
         <div class="result-info">
@@ -25,7 +42,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -34,6 +51,7 @@ export default {
     const router = useRouter()
     const searchQuery = ref('')
     const searchResults = ref([])
+    const selectedIndex = ref(-1)
 
     const handleSearch = async () => {
       if (searchQuery.value.length < 2) {
@@ -45,6 +63,7 @@ export default {
         const response = await fetch(`https://api.tvmaze.com/search/shows?q=${searchQuery.value}`)
         const data = await response.json()
         searchResults.value = data.map(item => item.show).slice(0, 5)
+        selectedIndex.value = -1
       } catch (error) {
         console.error('Search error:', error)
         searchResults.value = []
@@ -57,9 +76,39 @@ export default {
       searchResults.value = []
     }
 
+    // Handle keyboard navigation in search results
+    const handleKeyDown = (event) => {
+      if (!searchResults.value.length) return
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault()
+        selectedIndex.value = Math.min(selectedIndex.value + 1, searchResults.value.length - 1)
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault()
+        selectedIndex.value = Math.max(selectedIndex.value - 1, 0)
+      } else if (event.key === 'Enter' && selectedIndex.value >= 0) {
+        event.preventDefault()
+        navigateToShow(searchResults.value[selectedIndex.value].id)
+      } else if (event.key === 'Escape') {
+        searchQuery.value = ''
+        searchResults.value = []
+      }
+    }
+
+    watch(searchResults, (newVal) => {
+      if (newVal.length) {
+        setTimeout(() => {
+          window.addEventListener('keydown', handleKeyDown)
+        }, 100)
+      } else {
+        window.removeEventListener('keydown', handleKeyDown)
+      }
+    })
+
     return {
       searchQuery,
       searchResults,
+      selectedIndex,
       handleSearch,
       navigateToShow
     }
@@ -106,7 +155,6 @@ export default {
   box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
 }
 
-/* Hide webkit scrollbar */
 .search-results::-webkit-scrollbar {
   display: none;
 }
@@ -118,8 +166,9 @@ export default {
   transition: background-color 0.2s;
 }
 
-.search-result-item:hover {
+.search-result-item:hover, .search-result-item:focus {
   background-color: var(--vt-c-purple);
+  outline: none;
 }
 
 .result-image {
@@ -143,5 +192,16 @@ export default {
   margin: 0.25rem 0 0;
   font-size: 0.875rem;
   color: var(--color-text-light-2);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 </style>

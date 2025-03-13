@@ -1,14 +1,22 @@
 <template>
-  <div class="show-card" @click="navigateToShow">
+  <div
+    class="show-card"
+    @click="navigateToShow"
+    @keydown.enter="navigateToShow"
+    role="button"
+    tabindex="0"
+    :aria-label="`View details for ${show.name}`"
+  >
     <div class="image-container">
       <img :src="show.image && show.image.medium" :alt="show.name" class="show-image" />
-      <div class="rating" v-if="show.rating && show.rating.average">
+      <div class="rating" v-if="show.rating && show.rating.average" aria-hidden="true">
         <span>★ {{ show.rating.average }}</span>
       </div>
     </div>
     <div class="show-info">
       <h3 class="show-title">{{ show.name }}</h3>
       <p class="show-genres">{{ show.genres.join(', ') }}</p>
+      <p class="visually-hidden">Rating: {{ show.rating ? show.rating.average : 'Not rated' }}</p>
     </div>
   </div>
 </template>
@@ -42,20 +50,21 @@ const navigateToShow = () => {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 12rem; /* Adjust width for mobile */
-  margin: 0 auto; /* Center in viewport */
+  max-width: 12rem;
+  margin: 0 auto;
 }
 
-.show-card:hover {
+.show-card:hover, .show-card:focus {
   transform: scale(1.2);
   z-index: 20;
   box-shadow: 0 0 0.9375rem rgba(0, 0, 0, 0.5);
+  outline: 2px solid var(--vt-c-purple);
 }
 
 .image-container {
   position: relative;
   width: 100%;
-  padding-top: 150%; /* 2:3 aspect ratio */
+  padding-top: 150%;
   overflow: hidden;
 }
 
@@ -69,7 +78,7 @@ const navigateToShow = () => {
   transition: transform 0.3s;
 }
 
-.show-card:hover .show-image {
+.show-card:hover .show-image, .show-card:focus .show-image {
   transform: scale(1.05);
 }
 
@@ -113,9 +122,20 @@ const navigateToShow = () => {
   text-overflow: ellipsis;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 @media (max-width: 480px) {
   .show-card {
-    max-width: 10rem; /* Smaller size for mobile */
+    max-width: 10rem;
   }
 
   .show-info {
@@ -132,8 +152,8 @@ const navigateToShow = () => {
 }
 
 @media (max-width: 600px) {
-  .show-card:hover {
-    transform: scale(1.1); /* Smaller scale on mobile */
+  .show-card:hover, .show-card:focus {
+    transform: scale(1.1); 
   }
 
   .show-info {
