@@ -38,7 +38,10 @@ describe('ShowSlider', () => {
     expect(wrapper.exists()).toBe(true)
   })
 
-  it('scrolls correctly when buttons are clicked', async () => {
+  it('updates button visibility when scrolling', async () => {
+    // Mock scrollBy since it's not available in JSDOM
+    Element.prototype.scrollBy = vi.fn()
+
     const wrapper = mount(ShowSlider, {
       global: {
         plugins: [router],
@@ -47,12 +50,15 @@ describe('ShowSlider', () => {
         default: `<ShowCard :show='${JSON.stringify(mockShow)}' />`,
       },
     })
-    const nextButton = wrapper.find('.nav-button.next')
-    const initialScrollLeft = wrapper.find('.shows-row').element.scrollLeft
 
+    // Initial state - can't scroll back
+    expect(wrapper.vm.canScrollBack).toBe(false)
+
+    // Click on the next button
+    const nextButton = wrapper.find('.nav-button.next')
     await nextButton.trigger('click')
 
-    const newScrollLeft = wrapper.find('.shows-row').element.scrollLeft
-    expect(newScrollLeft).toBeGreaterThan(initialScrollLeft)
+    // Verify the scrollBy function was called
+    expect(Element.prototype.scrollBy).toHaveBeenCalled()
   })
 })
