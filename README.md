@@ -1,69 +1,62 @@
 # tv-show-dashboard
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
+This project is developed with Vue 3 and Vite, focusing on clean and reusable code.
 
 ## Project Setup
 
-```sh
-npm install
-```
+1. **Clone the repository:**
 
-### Compile and Hot-Reload for Development
+   ```sh
+   git clone <https://github.com/DisciplinedFlow/TvShows.git>
+   ```
 
-```sh
-npm run dev
-```
+2. **Navigate to the project directory:**
 
-### Compile and Minify for Production
+   ```sh
+   cd tv-show-dashboard
+   ```
 
-```sh
-npm run build
-```
+3. **Install dependencies:**
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+   ```sh
+   npm install
+   ```
 
-```sh
-npm run test:unit
-```
+4. **Start the development server:**
 
-### Lint with [ESLint](https://eslint.org/)
+   ```sh
+   npm run dev
+   ```
 
-```sh
-npm run lint
-```
+5. **Compile for production:**
 
-### Typography
+   ```sh
+   npm run build
+   ```
 
-```css
-@import url('https://rsms.me/inter/inter.css');
+6. **Run unit tests:**
 
-body {
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-}
+   ```sh
+   npm run test:unit
+   ```
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Proxima Nova', sans-serif;
-  font-weight: bold;
-}
+7. **Lint the code:**
+   ```sh
+   npm run lint
+   ```
 
-@media (max-width: 768px) {
-  body {
-    font-size: 14px;
-  }
-}
-```
+## Node.js Version
+
+Ensure you are using Node.js version 14.x or later.
+
+## Architecture
+
+The application follows a component-based structure, allowing for easy maintenance and scalability. State management is handled using Vue's Composition API.
+
+## Typography
+
+The project uses 'Inter' and 'Proxima Nova' fonts for a modern look.
+
+## Running Instructions
+
+Open your browser and go to `http://localhost:3000` to view the application.

@@ -16,7 +16,7 @@ const router = createRouter({
       component: ShowDetail,
       props: (route) => ({ id: Number(route.params.id) }),
     },
-    // Remove the search route until ShowList component is implemented
+    
   ],
 })
 
